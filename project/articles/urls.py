@@ -1,6 +1,6 @@
 from django.urls import path
 # Импортируем созданное нами представление
-from .views import NewsList, NewsDetail, NewsSearch, NewCreate, NewUpdate, NewDelete
+from .views import ArticlesList, ArticleDelete, ArticlesSearch, ArticleCreate, ArticleUpdate, ArticlesDetail
 
 
 urlpatterns = [
@@ -10,12 +10,12 @@ urlpatterns = [
    # Т.к. наше объявленное представление является классом,
    # а Django ожидает функцию, нам надо представить этот класс в виде view.
    # Для этого вызываем метод as_view.
-   path('', NewsList.as_view(), name='news_list'),
+   path('', ArticlesList.as_view(), name='articles_list'),
    # pk — это первичный ключ товара, который будет выводиться у нас в шаблон
    # int — указывает на то, что принимаются только целочисленные значения
-   path('<int:pk>', NewsDetail.as_view(), name='news_detail'),
-   path('search/', NewsSearch.as_view(), name='news_search'),
-   path('create/', NewCreate.as_view(), name='news_create'),
-   path('<int:pk>/update/', NewUpdate.as_view(), name='news_update'),
-   path('<int:pk>/delete/', NewDelete.as_view(), name='news_delete'),
+   path('<int:pk>', ArticlesDetail.as_view(), name='articles_detail'),
+   path('search-art/', ArticlesSearch.as_view(), name='articles_search'),
+   path('create-art/', ArticleCreate.as_view(), name='articles_create'),
+   path('<int:pk>/update-art/', ArticleUpdate.as_view(), name='articles_update'),
+   path('<int:pk>/delete-art/', ArticleDelete.as_view(), name='articles_delete'),
 ]

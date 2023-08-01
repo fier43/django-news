@@ -1,23 +1,19 @@
-{% extends 'flatpages\default.html' %}
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
 
 {% block title %}
-News
+Articles
 {% endblock title %}
 
 {% block content %}
-<h1>Поиск</h1>
+<h1>Все новости</h1>
+{% if page_obj.paginator.count > 0 %}
+<h3> {{ next_sale }} {{ page_obj.paginator.count }}</h3>
+{% endif %}
 <hr>
-
-{# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
-<form action="" method="get">
-    {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
-    {{ filterset.form.as_p }}
-    {# Добавим кнопку отправки данных формы #}
-    <input type="submit" value="Найти" />
-</form>
-
-<hr>
-{% if news %}
+{% if articles %}
 <table class="table" style="width: 100%;">
     <thead>
         <tr>
@@ -32,7 +28,7 @@ News
            т.е. новый HTML код, который указан в теле цикла.
            При этом сам цикл работает точно так же, как и в Python.
            product — переменная цикла, т.е. наш товар полученный из списка -->
-        {% for item in news %}
+        {% for item in articles %}
         <tr>
             <!-- Не забываем, что переменные в шаблоне ничем не отличаются
 
@@ -51,4 +47,29 @@ News
 {% else %}
 <h2>Новостей нет!</h2>
 {% endif %}
+
+{# Добавляем пагинацию на страницу #}
+{% if page_obj.paginator.count > 0 %}
+{# Информация о предыдущих страницах #}
+{% if page_obj.has_previous %}
+<a href="?page=1">1</a>
+{% if page_obj.previous_page_number != 1 %}
+...
+<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+{% endif %}
+{% endif %}
+
+{# Информация о текущей странице #}
+{{ page_obj.number }}
+
+{# Информация о следующих страницах #}
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+{% if paginator.num_pages != page_obj.next_page_number %}
+...
+<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+{% endif %}
+{% endif %}
+{% endif %}
+
 {% endblock content %}

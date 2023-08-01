@@ -1,10 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from datetime import datetime
-from .forms import NewsForm
+from .forms import ArticlesForm
 from django.urls import reverse_lazy
-
-
 
 
 
@@ -12,21 +10,21 @@ from django.urls import reverse_lazy
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView, CreateView, UpdateView,DeleteView
 # from django.views.generic.detail import DetailView
-from .models import News
-from .filters import NewsFilter
+from .models import Articles
+from .filters import ArticlesFilter
 
 
-class NewsList(ListView):
+class ArticlesList(ListView):
     # Указываем модель, объекты которой мы будем выводить
-    model = News
+    model = Articles
     # Поле, которое будет использоваться для сортировки объектов
     ordering = 'title'
     # Указываем имя шаблона, в котором будут все инструкции о том,
     # как именно пользователю должны быть показаны наши объекты
-    template_name = 'news.html'
+    template_name = 'articles.html'
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
-    context_object_name = 'news'
+    context_object_name = 'articles'
     paginate_by = 3 # вот так мы можем указать количество записей на странице
 
     def get_context_data(self, **kwargs):
@@ -35,22 +33,22 @@ class NewsList(ListView):
         # что и были переданы нам.
         # В ответе мы должны получить словарь.
         context = super().get_context_data(**kwargs)
-        context['next_sale'] = f"Новостей на текущее время:"
+        context['next_sale'] = f"Статей на текущее время:"
 
         return context
 
-class NewsDetail(DetailView):
+class ArticlesDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
-    model = News
-    # Используем другой шаблон — News.html
-    template_name = 'news-detail.html'
+    model = Articles
+    # Используем другой шаблон — Articles.html
+    template_name = 'articles-detail.html'
     # Название объекта, в котором будет выбранный пользователем продукт
-    context_object_name = 'news'
+    context_object_name = 'articles'
 
-class NewsSearch(ListView):
-    model = News
-    template_name = 'search.html'
-    context_object_name = 'news'
+class ArticlesSearch(ListView):
+    model = Articles
+    template_name = 'articles-search.html'
+    context_object_name = 'articles'
 
     def get_queryset(self):
         # Получаем обычный запрос
@@ -60,7 +58,7 @@ class NewsSearch(ListView):
         # в этом юните ранее.
         # Сохраняем нашу фильтрацию в объекте класса,
         # чтобы потом добавить в контекст и использовать в шаблоне.
-        self.filterset = NewsFilter(self.request.GET, queryset)
+        self.filterset = ArticlesFilter(self.request.GET, queryset)
         # Возвращаем из функции отфильтрованный список товаров
         return self.filterset.qs
 
@@ -79,22 +77,22 @@ class NewsSearch(ListView):
         return context
 
 # Добавляем новое представление для создания товаров.
-class NewCreate(CreateView):
+class ArticleCreate(CreateView):
     # Указываем нашу разработанную форму
-    form_class = NewsForm
+    form_class = ArticlesForm
     # модель товаров
-    model = News
+    model = Articles
     # и новый шаблон, в котором используется форма.
-    template_name = 'new_edit.html'
+    template_name = 'articles-edit.html'
 
 # Добавляем представление для изменения товара.
-class NewUpdate(UpdateView):
-    form_class = NewsForm
-    model = News
-    template_name = 'new_edit.html'
+class ArticleUpdate(UpdateView):
+    form_class = ArticlesForm
+    model = Articles
+    template_name = 'articles-edit.html'
 
 # Представление удаляющее товар.
-class NewDelete(DeleteView):
-    model = News
-    template_name = 'new_delete.html'
-    success_url = reverse_lazy('news_list')
+class ArticleDelete(DeleteView):
+    model = Articles
+    template_name = 'Articles-delete.html'
+    success_url = reverse_lazy('articles_list')

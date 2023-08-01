@@ -4,11 +4,11 @@ from django.urls import reverse
 
 
 
-# Новость для нашей витрины
-class News(models.Model):
+# Cтатьи для нашей витрины
+class Articles(models.Model):
     title = models.CharField(
         max_length=50,
-        unique=True, # названия товаров не должны повторяться
+        unique=True, # названия статей не должны повторяться
     )
     description = models.TextField()
     date = models.DateField(help_text=('YYYY-MM-DD'))
@@ -17,7 +17,7 @@ class News(models.Model):
     category = models.ForeignKey(
         to='Category',
         on_delete=models.CASCADE,
-        related_name='news', # все продукты в категории будут доступны через поле news
+        related_name='articles', # все продукты в категории будут доступны через поле articles
     )
 
 
@@ -25,11 +25,10 @@ class News(models.Model):
         return f'{self.description}'
 
     def get_absolute_url(self):
-        return reverse('news_detail', args=[str(self.id)])
+        return reverse('articles_detail', args=[str(self.id)])
 
     class Meta:
-        verbose_name_plural = "News"
-
+        verbose_name_plural = "Articles"
 
 
 # Категория, к которой будет привязываться товар
@@ -42,3 +41,4 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+
