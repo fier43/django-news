@@ -23,4 +23,7 @@ urlpatterns = [
     # подключались к главному приложению с префиксом news/.
     path('news/', include('simpleapp.urls')),
     path('articles/', include('articles.urls')),
+    path('', include('protect.urls')),
+    path('sign/', include('sign.urls')),
+    path('accounts/', include('allauth.urls')),
 ]

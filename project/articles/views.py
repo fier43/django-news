@@ -3,7 +3,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .forms import ArticlesForm
 from django.urls import reverse_lazy
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 # Импортируем класс, который говорит нам о том,
@@ -77,7 +77,8 @@ class ArticlesSearch(ListView):
         return context
 
 # Добавляем новое представление для создания товаров.
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('articles.add_articles')
     # Указываем нашу разработанную форму
     form_class = ArticlesForm
     # модель товаров
@@ -86,13 +87,15 @@ class ArticleCreate(CreateView):
     template_name = 'articles-edit.html'
 
 # Добавляем представление для изменения товара.
-class ArticleUpdate(UpdateView):
+class ArticleUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('articles.change_articles')
     form_class = ArticlesForm
     model = Articles
     template_name = 'articles-edit.html'
 
 # Представление удаляющее товар.
-class ArticleDelete(DeleteView):
+class ArticleDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('articles.delete_articles')
     model = Articles
     template_name = 'Articles-delete.html'
     success_url = reverse_lazy('articles_list')

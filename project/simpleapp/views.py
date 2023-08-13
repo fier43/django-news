@@ -3,10 +3,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .forms import NewsForm
 from django.urls import reverse_lazy
-
-
-
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
@@ -79,7 +76,8 @@ class NewsSearch(ListView):
         return context
 
 # Добавляем новое представление для создания товаров.
-class NewCreate(CreateView):
+class NewCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_news')
     # Указываем нашу разработанную форму
     form_class = NewsForm
     # модель товаров
@@ -88,13 +86,15 @@ class NewCreate(CreateView):
     template_name = 'new_edit.html'
 
 # Добавляем представление для изменения товара.
-class NewUpdate(UpdateView):
+class NewUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ( 'simpleapp.change_news')
     form_class = NewsForm
     model = News
     template_name = 'new_edit.html'
 
 # Представление удаляющее товар.
-class NewDelete(DeleteView):
+class NewDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('simpleapp.delete_news')
     model = News
     template_name = 'new_delete.html'
     success_url = reverse_lazy('news_list')
