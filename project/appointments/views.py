@@ -26,4 +26,4 @@ class AppointmentView(View):
             recipient_list=['gena-zub96@mail.ru', ]  # здесь список получателей. Например, секретарь, сам врач и т. д.
         )
 
-        return redirect('appointments:make_appointment')
+        return redirect('make_appointment')
