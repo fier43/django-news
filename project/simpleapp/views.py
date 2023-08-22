@@ -9,8 +9,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView, CreateView, UpdateView,DeleteView
 # from django.views.generic.detail import DetailView
-from .models import News
+from .models import News, Category
 from .filters import NewsFilter
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 class NewsList(ListView):
@@ -40,13 +42,13 @@ class NewsDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = News
     # Используем другой шаблон — News.html
-    template_name = 'news-detail.html'
+    template_name = 'news/news-detail.html'
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'news'
 
 class NewsSearch(ListView):
     model = News
-    template_name = 'search.html'
+    template_name = 'news/search.html'
     context_object_name = 'news'
 
     def get_queryset(self):
@@ -83,18 +85,45 @@ class NewCreate(PermissionRequiredMixin, CreateView):
     # модель товаров
     model = News
     # и новый шаблон, в котором используется форма.
-    template_name = 'new_edit.html'
+    template_name = 'news/new_edit.html'
 
 # Добавляем представление для изменения товара.
 class NewUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = ( 'simpleapp.change_news')
     form_class = NewsForm
     model = News
-    template_name = 'new_edit.html'
+    template_name = 'news/new_edit.html'
 
 # Представление удаляющее товар.
 class NewDelete(PermissionRequiredMixin, DeleteView):
     permission_required = ('simpleapp.delete_news')
     model = News
-    template_name = 'new_delete.html'
+    template_name = 'news/new_delete.html'
     success_url = reverse_lazy('news_list')
+
+
+class CategoryListView(NewsList):
+    model = News
+    template_name = 'news/category_list.html'
+    context_object_name = 'category_news_list'
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = News.objects.filter(category=self.category)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context['category'] = self.category
+        return context
+
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(ip=pk)
+    category.subscribers.add(user)
+
+    message = 'Вы успешно подписались на рассылку новостей категорий'
+    return render(request, 'news/subscribe.html', {'category': category, 'message': message})

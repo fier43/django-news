@@ -13,7 +13,7 @@ News
 <h3> {{ next_sale }} {{ page_obj.paginator.count }}</h3>
 {% endif %}
 <hr>
-{% if news %}
+{% if category_news_list %}
 <table class="table" style="width: 100%;">
     <thead>
         <tr>
@@ -28,7 +28,7 @@ News
            т.е. новый HTML код, который указан в теле цикла.
            При этом сам цикл работает точно так же, как и в Python.
            product — переменная цикла, т.е. наш товар полученный из списка -->
-        {% for item in news %}
+        {% for item in category_news_list %}
         <tr>
             <!-- Не забываем, что переменные в шаблоне ничем не отличаются
 
@@ -50,8 +50,8 @@ News
             <td>
                 <a href="{% url 'news_delete' item.id %}"><u>Удалить</u></a>
             </td>
-
         </tr>
+
         {% endfor %}
     </tbody>
 </table>
