@@ -14,6 +14,8 @@ from .filters import NewsFilter
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
+from django.core.mail import send_mail
+
 
 class NewsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -78,7 +80,7 @@ class NewsSearch(ListView):
         return context
 
 # Добавляем новое представление для создания товаров.
-class NewCreate(PermissionRequiredMixin, CreateView):
+class NewsCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ('simpleapp.add_news')
     # Указываем нашу разработанную форму
     form_class = NewsForm
@@ -102,7 +104,7 @@ class NewDelete(PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('news_list')
 
 
-class CategoryListView(NewsList):
+class CategoryView(NewsList):
     model = News
     template_name = 'news/category_list.html'
     context_object_name = 'category_news_list'
@@ -122,7 +124,7 @@ class CategoryListView(NewsList):
 @login_required
 def subscribe(request, pk):
     user = request.user
-    category = Category.objects.get(ip=pk)
+    category = Category.objects.get(id=pk)
     category.subscribers.add(user)
 
     message = 'Вы успешно подписались на рассылку новостей категорий'

@@ -41,7 +41,7 @@ News
             <td>{{ item.date }}</td>
             <td>
                 {% for category in item.category.all %}
-                <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                <a href="{% url 'category_details' category.id %}">{{ category }}</a>
                 {% endfor %}
             </td>
             <td>

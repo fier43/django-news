@@ -4,6 +4,17 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+# Категория, к которой будет привязываться товар
+class Category(models.Model):
+    # названия категорий тоже не должны повторяться
+    name = models.CharField(max_length=100, unique=True)
+    subscribers = models.ManyToManyField(User, related_name='categories' )
+
+    def __str__(self):
+        return self.name.title()
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
 # Новость для нашей витрины
 class News(models.Model):
@@ -15,9 +26,8 @@ class News(models.Model):
     date = models.DateField(help_text=('YYYY-MM-DD'))
 
     # поле категории будет ссылаться на модель категории
-    category = models.ForeignKey(
-        to='Category',
-        on_delete=models.CASCADE,
+    category = models.ManyToManyField(
+        Category,
         related_name='news', # все продукты в категории будут доступны через поле news
     )
 
@@ -28,19 +38,11 @@ class News(models.Model):
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
 
+    def preview(self):
+        return f"{self.description[:124]}..."
+
     class Meta:
         verbose_name_plural = "News"
 
 
 
-# Категория, к которой будет привязываться товар
-class Category(models.Model):
-    # названия категорий тоже не должны повторяться
-    name = models.CharField(max_length=100, unique=True)
-    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name='categories' )
-
-    def __str__(self):
-        return self.name.title()
-
-    class Meta:
-        verbose_name_plural = "Categories"

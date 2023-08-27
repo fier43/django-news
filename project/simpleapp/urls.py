@@ -1,6 +1,6 @@
 from django.urls import path
 # Импортируем созданное нами представление
-from .views import NewsList, NewsDetail, NewsSearch, NewCreate, NewUpdate, NewDelete, CategoryListView, subscribe
+from .views import NewsList, NewsDetail, NewsSearch, NewsCreateView, NewUpdate, NewDelete, CategoryView, subscribe
 
 
 urlpatterns = [
@@ -15,10 +15,10 @@ urlpatterns = [
    # int — указывает на то, что принимаются только целочисленные значения
    path('<int:pk>', NewsDetail.as_view(), name='news_detail'),
    path('search/', NewsSearch.as_view(), name='news_search'),
-   path('create/', NewCreate.as_view(), name='news_create'),
+   path('create/', NewsCreateView.as_view(), name='news_create'),
    path('<int:pk>/update/', NewUpdate.as_view(), name='news_update'),
    path('<int:pk>/delete/', NewDelete.as_view(), name='news_delete'),
-   path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),
+   path('categories/<int:pk>', CategoryView.as_view(), name='category_details'),
    path('categories/<int:pk>/subscribe/', subscribe, name='subscribe'),
 
 ]

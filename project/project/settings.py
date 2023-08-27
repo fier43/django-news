@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     'fontawesomefree',
     'fpages',
-    'simpleapp',
+    'simpleapp.apps.SimpleappConfig',
     'django_filters',
     'articles',
     'sign',
@@ -170,9 +170,13 @@ EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
 EMAIL_HOST_USER = 'DimonDexp'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
 EMAIL_HOST_PASSWORD = 'znsnmfyzseddkoeo'  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'DimonDexp@yandex.ru'
 
 ADMINS = [
     ('Gena', 'gena-zub96@mail.ru'),
     # список всех админов в формате ('имя', 'их почта')
 ]
 SERVER_EMAIL = 'DimonDexp@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
+
+SITE_URL = 'http://127.0.0.1:8000'

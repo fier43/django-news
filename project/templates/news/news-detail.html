@@ -12,6 +12,10 @@ News
 {% block content %}
 <h1>{{ news.title }}</h1>
 <span>{{ news.date }}</span>
-<span>{{ news.category }}</span>
+<span>
+    {% for category in news.category.all %}
+    <a href="{% url 'category_details' category.id %}">{{ category }}</a>
+    {% endfor %}
+</span>
 <p>{{ news.description|censor }}</p>
 {% endblock content %}
