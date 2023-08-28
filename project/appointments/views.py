@@ -9,7 +9,6 @@ from .models import Appointment
 
 
 from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
-from .models import Appointment
 
 
 class AppointmentView(View):
