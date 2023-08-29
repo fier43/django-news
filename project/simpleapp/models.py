@@ -35,6 +35,9 @@ class News(models.Model):
     def __str__(self):
         return f'{self.description}'
 
+    # def get_absolute_urls(self):
+    #     return f'/news/{self.id}'
+
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
 

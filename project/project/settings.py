@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
+    'django_apscheduler',
 ]
 
 SITE_ID = 1
@@ -180,3 +181,10 @@ ADMINS = [
 SERVER_EMAIL = 'DimonDexp@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
 
 SITE_URL = 'http://127.0.0.1:8000'
+
+# формат даты, которую будет воспринимать наш задачник (вспоминаем модуль по фильтрам)
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+# если задача не выполняется за 25 секунд, то она автоматически снимается,
+# можете поставить время побольше, но как правило, это сильно бьёт по производительности сервера
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
