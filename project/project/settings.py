@@ -189,18 +189,9 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 # можете поставить время побольше, но как правило, это сильно бьёт по производительности сервера
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_BROKER_URL = 'redis://default:VpX88w0DunCcv4AuBroo9jfihqY9vSv7@redis-19170.c10.us-east-1-4.ec2.cloud.redislabs.com:19170'
+CELERY_RESULT_BACKEND = 'redis://default:VpX88w0DunCcv4AuBroo9jfihqY9vSv7@redis-19170.c10.us-east-1-4.ec2.cloud.redislabs.com:19170'
+CETLERY_ACCEPT_CONENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
-import redis
-
-red = redis.Redis(
-    host='redis-19170.c10.us-east-1-4.ec2.cloud.redislabs.com',
-    port='19170',
-    password='VpX88w0DunCcv4AuBroo9jfihqY9vSv7'
-)
-# password redis = VpX88w0DunCcv4AuBroo9jfihqY9vSv7
-# endpoint = redis-19170.c10.us-east-1-4.ec2.cloud.redislabs.com:19170
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True

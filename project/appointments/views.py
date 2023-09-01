@@ -11,6 +11,7 @@ from .models import Appointment
 from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
 
 
+
 class AppointmentView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'make_appointment.html', {})
@@ -45,3 +46,12 @@ class AppointmentView(View):
         # )
 
         # return redirect('make_appointment')
+
+
+from django.http import HttpResponse
+from .tasks import hello
+
+class IndexView(View):
+    def get(self, request):
+        hello.delay()
+        return HttpResponse('Hello!')
