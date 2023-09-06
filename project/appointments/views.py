@@ -38,20 +38,3 @@ class AppointmentView(View):
         msg.send()  # отсылаем
 
         return redirect('make_appointment')
-
-        # # отправляем письмо всем админам по аналогии с send_mail, только здесь получателя указывать не надо
-        # mail_admins(
-       	# subject=f'{appointment.client_name} {appointment.date.strftime("%d %m %Y")}',
-        #     message=appointment.message,
-        # )
-
-        # return redirect('make_appointment')
-
-
-from django.http import HttpResponse
-from .tasks import hello
-
-class IndexView(View):
-    def get(self, request):
-        hello.delay()
-        return HttpResponse('Hello!')

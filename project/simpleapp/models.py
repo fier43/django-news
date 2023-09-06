@@ -28,15 +28,12 @@ class News(models.Model):
     # поле категории будет ссылаться на модель категории
     category = models.ManyToManyField(
         Category,
-        related_name='news', # все продукты в категории будут доступны через поле news
+        related_name='news', # все новости в категории будут доступны через поле news
     )
 
 
     def __str__(self):
         return f'{self.description}'
-
-    # def get_absolute_urls(self):
-    #     return f'/news/{self.id}'
 
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
