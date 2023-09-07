@@ -38,3 +38,5 @@ class AppointmentView(View):
         msg.send()  # отсылаем
 
         return redirect('make_appointment')
+
+
