@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 from django.core.mail import send_mail
-
+from django.core.cache import cache
 
 class NewsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -47,6 +47,15 @@ class NewsDetail(DetailView):
     template_name = 'news/news-detail.html'
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'news'
+
+    def get_object(self, *args, **kwargs): # переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'news-{self.kwargs["pk"]}', None) # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'news-{self.kwargs["pk"]}', obj)
+            return obj
 
 class NewsSearch(ListView):
     model = News
