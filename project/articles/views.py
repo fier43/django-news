@@ -8,7 +8,14 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView, CreateView, UpdateView,DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+
 # from django.views.generic.detail import DetailView
 from .models import Articles
 from .filters import ArticlesFilter
@@ -18,14 +25,14 @@ class ArticlesList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Articles
     # Поле, которое будет использоваться для сортировки объектов
-    ordering = 'title'
+    ordering = "title"
     # Указываем имя шаблона, в котором будут все инструкции о том,
     # как именно пользователю должны быть показаны наши объекты
-    template_name = 'articles.html'
+    template_name = "articles.html"
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
-    context_object_name = 'articles'
-    paginate_by = 10 # вот так мы можем указать количество записей на странице
+    context_object_name = "articles"
+    paginate_by = 10  # вот так мы можем указать количество записей на странице
 
     def get_context_data(self, **kwargs):
         # С помощью super() мы обращаемся к родительским классам
@@ -33,22 +40,24 @@ class ArticlesList(ListView):
         # что и были переданы нам.
         # В ответе мы должны получить словарь.
         context = super().get_context_data(**kwargs)
-        context['next_sale'] = f"Статей на текущее время:"
+        context["next_sale"] = f"Статей на текущее время:"
 
         return context
+
 
 class ArticlesDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Articles
     # Используем другой шаблон — Articles.html
-    template_name = 'articles-detail.html'
+    template_name = "articles-detail.html"
     # Название объекта, в котором будет выбранный пользователем продукт
-    context_object_name = 'articles'
+    context_object_name = "articles"
+
 
 class ArticlesSearch(ListView):
     model = Articles
-    template_name = 'articles-search.html'
-    context_object_name = 'articles'
+    template_name = "articles-search.html"
+    context_object_name = "articles"
 
     def get_queryset(self):
         # Получаем обычный запрос
@@ -72,30 +81,33 @@ class ArticlesSearch(ListView):
         # context['time_now'] = datetime.utcnow()
         # # Добавим ещё одну пустую переменную,
         # # чтобы на её примере рассмотреть работу ещё одного фильтра.
-        context['filterset'] = self.filterset
+        context["filterset"] = self.filterset
 
         return context
 
+
 # Добавляем новое представление для создания товаров.
 class ArticleCreate(PermissionRequiredMixin, CreateView):
-    permission_required = ('articles.add_articles')
+    permission_required = "articles.add_articles"
     # Указываем нашу разработанную форму
     form_class = ArticlesForm
     # модель товаров
     model = Articles
     # и новый шаблон, в котором используется форма.
-    template_name = 'articles-edit.html'
+    template_name = "articles-edit.html"
+
 
 # Добавляем представление для изменения товара.
 class ArticleUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required = ('articles.change_articles')
+    permission_required = "articles.change_articles"
     form_class = ArticlesForm
     model = Articles
-    template_name = 'articles-edit.html'
+    template_name = "articles-edit.html"
+
 
 # Представление удаляющее товар.
 class ArticleDelete(PermissionRequiredMixin, DeleteView):
-    permission_required = ('articles.delete_articles')
+    permission_required = "articles.delete_articles"
     model = Articles
-    template_name = 'Articles-delete.html'
-    success_url = reverse_lazy('articles_list')
+    template_name = "Articles-delete.html"
+    success_url = reverse_lazy("articles_list")

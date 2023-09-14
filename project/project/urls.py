@@ -18,13 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     # Делаем так, чтобы все адреса из нашего приложения (simpleapp/urls.py)
     # подключались к главному приложению с префиксом news/.
-    path('news/', include('simpleapp.urls')),
-    path('articles/', include('articles.urls')),
-    path('appointments/', include(('appointments.urls', 'appointments'), namespace='appointments')),
-    path('', include('protect.urls')),
-    path('sign/', include('sign.urls')),
-    path('accounts/', include('allauth.urls')),
+    path("news/", include("simpleapp.urls")),
+    path("articles/", include("articles.urls")),
+    path(
+        "appointments/",
+        include(("appointments.urls", "appointments"), namespace="appointments"),
+    ),
+    path("", include("protect.urls")),
+    path("sign/", include("sign.urls")),
+    path("accounts/", include("allauth.urls")),
 ]

@@ -3,29 +3,27 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 
 
-
 # Cтатьи для нашей витрины
 class Articles(models.Model):
     title = models.CharField(
         max_length=50,
-        unique=True, # названия статей не должны повторяться
+        unique=True,  # названия статей не должны повторяться
     )
     description = models.TextField()
-    date = models.DateField(help_text=('YYYY-MM-DD'))
+    date = models.DateField(help_text=("YYYY-MM-DD"))
 
     # поле категории будет ссылаться на модель категории
     category = models.ForeignKey(
-        to='Category',
+        to="Category",
         on_delete=models.CASCADE,
-        related_name='articles', # все продукты в категории будут доступны через поле articles
+        related_name="articles",  # все продукты в категории будут доступны через поле articles
     )
 
-
     def __str__(self):
-        return f'{self.description}'
+        return f"{self.description}"
 
     def get_absolute_url(self):
-        return reverse('articles_detail', args=[str(self.id)])
+        return reverse("articles_detail", args=[str(self.id)])
 
     class Meta:
         verbose_name_plural = "Articles"
@@ -41,4 +39,3 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
-
