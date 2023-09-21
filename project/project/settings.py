@@ -228,7 +228,7 @@ LOGGING = {
         "warning": {
             "format": "%(asctime)s - %(levelname)s - %(message)s - %(pathname)s"
         },
-        "error": {"format": "%(pathname)s"},
+        "error": {"format": "%(asctime)s - %(levelname)s - %(message)s - %(pathname)s"},
     },
     "filters": {
         "require_debug_true": {
