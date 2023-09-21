@@ -99,6 +99,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",
+#         "USER": "postgres",
+#         "PASSWORD": PASSWORD_DB,
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     },
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -204,4 +215,97 @@ CACHES = {
             BASE_DIR, "cache_files"
         ),  # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
     }
+}
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "style": "{",
+    "formatters": {
+        "debug": {"format": "%(asctime)s - %(levelname)s - %(message)s"},
+        "info": {"format": "%(asctime)s - %(levelname)s - %(module)s - %(message)s"},
+        "warning": {
+            "format": "%(asctime)s - %(levelname)s - %(message)s - %(pathname)s"
+        },
+        "error": {"format": "%(pathname)s"},
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console_debug": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "debug",
+        },
+        "console_warning": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "error",
+        },
+        "file_general": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "logs/general.log",
+            "formatter": "info",
+        },
+        "file_errors": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": "logs/errors.log",
+            "formatter": "warning",
+        },
+        "file_security": {
+            "class": "logging.FileHandler",
+            "filename": "logs/security.log",
+            "formatter": "debug",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+            "formatter": "warning",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console_debug", "console_warning"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["file_general"],
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["file_errors"],
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["file_errors"],
+            "propagate": False,
+        },
+        "django.template": {
+            "handlers": ["file_errors"],
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["file_errors"],
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["file_security"],
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["mail_admins"],
+            "propagate": False,
+        },
+    },
 }
